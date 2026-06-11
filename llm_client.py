@@ -4,6 +4,9 @@ from anthropic import Anthropic
 
 load_dotenv()
 
+print(f"[DEBUG llm_client] 导入时 ANTHROPIC_API_KEY 存在: {os.getenv('ANTHROPIC_API_KEY') is not None}", flush=True)
+print(f"[DEBUG llm_client] 导入时 DEEPSEEK_API_KEY 存在: {os.getenv('DEEPSEEK_API_KEY') is not None}", flush=True)
+
 _API_KEY = None
 _BASE_URL = None
 _MODEL = None

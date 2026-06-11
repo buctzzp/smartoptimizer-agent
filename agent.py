@@ -1,7 +1,12 @@
 import os
+import sys
 from dotenv import load_dotenv
 from llm_client import get_client, get_model
 from prompts import OPTIMIZER_SYSTEM_PROMPT
+
+print(f"[DEBUG] agent.py 导入时 os.environ KEYS: {list(os.environ.keys())}", flush=True)
+print(f"[DEBUG] agent.py 导入时 ANTHROPIC_API_KEY 存在: {os.getenv('ANTHROPIC_API_KEY') is not None}", flush=True)
+sys.stdout.flush()
 
 
 def run_agent_stream(user_input: str):
@@ -17,14 +22,16 @@ def run_agent_stream(user_input: str):
     load_dotenv()
 
     # --- 环境变量诊断 ---
-    debug_lines = [
-        f"`ANTHROPIC_API_KEY` 是否设置: {'✅ 是' if os.getenv('ANTHROPIC_API_KEY') else '❌ 否'}",
-        f"`DEEPSEEK_API_KEY` 是否设置: {'✅ 是' if os.getenv('DEEPSEEK_API_KEY') else '❌ 否'}",
-        f"`ANTHROPIC_BASE_URL`: `{os.getenv('ANTHROPIC_BASE_URL', '未设置')}`",
-        f"`ANTHROPIC_MODEL`: `{os.getenv('ANTHROPIC_MODEL', '未设置')}`",
-        f"当前所有环境变量 KEY（前 20 个）: `{list(os.environ.keys())[:20]}`",
-    ]
-    yield ("🔍 **诊断信息**\n\n" + "\n".join(debug_lines), "", None)
+    print("=" * 50, flush=True)
+    print("[DEBUG] load_dotenv() 完成", flush=True)
+    print(f"[DEBUG] os.environ 中所有 KEY: {list(os.environ.keys())}", flush=True)
+    print(f"[DEBUG] ANTHROPIC_API_KEY 存在: {os.getenv('ANTHROPIC_API_KEY') is not None}", flush=True)
+    print(f"[DEBUG] DEEPSEEK_API_KEY 存在: {os.getenv('DEEPSEEK_API_KEY') is not None}", flush=True)
+    print(f"[DEBUG] ANTHROPIC_BASE_URL = {os.getenv('ANTHROPIC_BASE_URL', '未设置')}", flush=True)
+    print(f"[DEBUG] ANTHROPIC_MODEL = {os.getenv('ANTHROPIC_MODEL', '未设置')}", flush=True)
+    key_vars = {k: v for k, v in os.environ.items() if 'KEY' in k.upper() or 'API' in k.upper() or 'TOKEN' in k.upper() or 'SECRET' in k.upper()}
+    print(f"[DEBUG] 敏感相关环境变量: { {k: v[:8] + '...' if v else '<空>' for k, v in key_vars.items()} }", flush=True)
+    print("=" * 50, flush=True)
     # -------------------
 
     if not os.getenv("ANTHROPIC_API_KEY") and not os.getenv("DEEPSEEK_API_KEY"):
