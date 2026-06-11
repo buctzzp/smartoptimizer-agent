@@ -1,6 +1,6 @@
 import os
 from dotenv import load_dotenv
-from llm_client import client, MODEL
+from llm_client import get_client, get_model
 from prompts import OPTIMIZER_SYSTEM_PROMPT
 
 
@@ -24,8 +24,11 @@ def run_agent_stream(user_input: str):
 
     yield ("🔄 **正在分析...**", "", None)
 
+    client = get_client()
+    model = get_model()
+
     with client.messages.stream(
-        model=MODEL,
+        model=model,
         system=OPTIMIZER_SYSTEM_PROMPT,
         messages=messages,
         max_tokens=4096,

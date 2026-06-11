@@ -4,27 +4,34 @@ from anthropic import Anthropic
 
 load_dotenv()
 
-API_KEY = os.getenv("ANTHROPIC_API_KEY") or os.getenv("DEEPSEEK_API_KEY")
-BASE_URL = os.getenv("ANTHROPIC_BASE_URL", "https://api.deepseek.com/anthropic")
-MODEL = os.getenv("ANTHROPIC_MODEL", "deepseek-chat")
+_API_KEY = None
+_BASE_URL = None
+_MODEL = None
+_CLIENT = None
 
-client = Anthropic(api_key=API_KEY, base_url=BASE_URL)
+
+def _load_config():
+    global _API_KEY, _BASE_URL, _MODEL
+    if _API_KEY is not None:
+        return
+    _API_KEY = os.getenv("ANTHROPIC_API_KEY") or os.getenv("DEEPSEEK_API_KEY")
+    _BASE_URL = os.getenv("ANTHROPIC_BASE_URL", "https://api.deepseek.com/anthropic")
+    _MODEL = os.getenv("ANTHROPIC_MODEL", "deepseek-chat")
 
 
-def call_llm(messages, system=None, tools=None, stream=False, temperature=0.2):
-    if not API_KEY:
-        raise RuntimeError("未检测到 ANTHROPIC_API_KEY，请先配置环境变量。")
+def get_client() -> Anthropic:
+    global _CLIENT
+    _load_config()
+    if _CLIENT is None:
+        _CLIENT = Anthropic(api_key=_API_KEY, base_url=_BASE_URL)
+    return _CLIENT
 
-    kwargs = dict(
-        model=MODEL,
-        messages=messages,
-        max_tokens=4096,
-        temperature=temperature,
-        stream=stream,
-    )
-    if system:
-        kwargs["system"] = system
-    if tools:
-        kwargs["tools"] = tools
 
-    return client.messages.create(**kwargs)
+def get_model() -> str:
+    _load_config()
+    return _MODEL
+
+
+def get_api_key() -> str | None:
+    _load_config()
+    return _API_KEY
