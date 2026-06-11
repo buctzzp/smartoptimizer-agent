@@ -15,6 +15,18 @@ def run_agent_stream(user_input: str):
         return
 
     load_dotenv()
+
+    # --- 环境变量诊断 ---
+    debug_lines = [
+        f"`ANTHROPIC_API_KEY` 是否设置: {'✅ 是' if os.getenv('ANTHROPIC_API_KEY') else '❌ 否'}",
+        f"`DEEPSEEK_API_KEY` 是否设置: {'✅ 是' if os.getenv('DEEPSEEK_API_KEY') else '❌ 否'}",
+        f"`ANTHROPIC_BASE_URL`: `{os.getenv('ANTHROPIC_BASE_URL', '未设置')}`",
+        f"`ANTHROPIC_MODEL`: `{os.getenv('ANTHROPIC_MODEL', '未设置')}`",
+        f"当前所有环境变量 KEY（前 20 个）: `{list(os.environ.keys())[:20]}`",
+    ]
+    yield ("🔍 **诊断信息**\n\n" + "\n".join(debug_lines), "", None)
+    # -------------------
+
     if not os.getenv("ANTHROPIC_API_KEY") and not os.getenv("DEEPSEEK_API_KEY"):
         yield ("❌ **配置错误**", "未检测到 ANTHROPIC_API_KEY。", None)
         return
