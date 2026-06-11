@@ -1,0 +1,4 @@
+gradio==6.17.3
+anthropic==0.109.1
+markdown-pdf==1.13.2
+python-dotenv==1.2.2

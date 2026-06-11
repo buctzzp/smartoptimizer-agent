@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pip install *)",
+      "Bash(python3 *)",
+      "WebSearch",
+      "Bash(pip freeze *)",
+      "Bash(fc-list :lang=zh)",
+      "Bash(curl -L -o NotoSansSC-Regular.ttf \"https://github.com/google/fonts/raw/main/ofl/notosanssc/NotoSansSC%5Bwght%5D.ttf\")",
+      "Bash(xxd)",
+      "Bash(curl -L -o NotoSansSC-Regular.ttf \"https://cdn.jsdelivr.net/gh/AimeeMao/Fonts@main/Noto_Sans_SC/NotoSansSC-Regular.ttf\")",
+      "Bash(curl -L --connect-timeout 10 -o /tmp/NotoSansSC.zip \"https://fonts.google.com/download?family=Noto+Sans+SC\")",
+      "Read(//tmp/**)",
+      "Bash(chmod +x *)"
+    ]
+  }
+}
